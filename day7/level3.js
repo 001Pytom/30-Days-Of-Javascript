@@ -95,3 +95,51 @@ console.log(rgbColor);
 // Write a function convertRgbToHexa which converts rgb to hexa color and it returns an hexa color.
 
 // to do this,pick the first part of the rbg and convert it to base10
+let convertRgbToHexa = (rgb) => {
+  rgb = rgb.substring(4, rgb.length - 1);
+
+  let red = parseInt(rgb.slice(0, 2));
+  let green = parseInt(rgb.slice(3, 6));
+  let blue = parseInt(rgb.slice(7, 12));
+
+  console.log(red);
+  console.log(blue);
+  console.log(green);
+
+  red = red.toString(16);
+  blue = blue.toString(16);
+  green = green.toString(16);
+
+  return `#${red}${green}${blue}`;
+};
+
+console.log(convertRgbToHexa("rgb(33,79, 176)"));
+// Call your function shuffleArray, it takes an array as a parameter and it returns a shuffled array
+
+function shuffleArray(array) {
+  const shuffledArray = [...array];
+
+  for (let i = shuffledArray.length - 1; i > 0; i--) {
+    const randomIndex = Math.floor(Math.random() * (i + 1));
+
+    [shuffledArray[i], shuffledArray[randomIndex]] = [
+      shuffledArray[randomIndex],
+      shuffledArray[i],
+    ];
+  }
+
+  return shuffledArray;
+}
+
+const originalArray = [1, 2, 3, 4, 5];
+const shuffledResult = shuffleArray(originalArray);
+
+console.log("Original Array:", originalArray);
+console.log("Shuffled Array:", shuffledResult);
+// Call your function isEmpty, it takes a parameter and it checks if it is empty or not
+
+function isEmpty(value) {
+  return !value; // Returns true if the value is falsy (null, undefined, empty string, 0, etc.)
+}
+
+console.log(isEmpty());
