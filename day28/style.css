@@ -30,6 +30,7 @@ header {
 input,
 button {
   border: none;
+  padding: 0.5rem;
   outline: 1px solid #d4a0a0;
 }
 

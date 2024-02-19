@@ -12,6 +12,7 @@ const countryInput = document.getElementById("country_input");
 const inputScore = document.getElementById("Input_score");
 const btn = document.querySelector(".btn");
 
+inputFN.focus();
 // function to get date
 function getCurrentDateTime() {
   const months = [
@@ -39,12 +40,17 @@ function getCurrentDateTime() {
   return `${month} ${day}, ${year} ${hours}:${minutes}`;
 }
 
-function saveEntry(entry) {
-  let entries = JSON.parse(localStorage.getItem("entries")) || [];
-  entries.push(entry);
-  console.log(entry, "entry");
-  localStorage.setItem("entries", entries);
-  console.log(entries);
+// save entreis to local storage
+function setLocalStorage() {
+  let existingData = JSON.parse(localStorage.getItem("personData")) || [];
+  const newData = {
+    firstName: inputFN.value,
+    lastName: inputLN.value,
+    country: countryInput.value,
+    score: inputScore.value,
+  };
+  existingData.push(newData);
+  localStorage.setItem("personData", JSON.stringify(existingData));
 }
 
 // function error message
@@ -60,35 +66,92 @@ let errorMessage = () => {
   }
 };
 
+// btn event lstener
 btn.addEventListener("click", () => {
+  const inputFNValue = inputFN.value.trim();
+  const inputLNValue = inputLN.value.trim();
+  const countryInputValue = countryInput.value.trim();
+  const inputScoreValue = inputScore.value.trim();
   if (
-    inputFN.value === noInput ||
-    inputLN.value === noInput ||
-    countryInput.value === noInput ||
-    inputScore.value === noInput
+    !inputFNValue ||
+    !inputLNValue ||
+    !countryInputValue ||
+    !inputScoreValue
   ) {
     errorMessage();
-  } else {
-    // Remove error message if it exists
-    const existingError = document.querySelector(".error-text");
-    if (existingError) {
-      existingError.remove();
-    }
+  }
+  // Remove error message if it exists
+  const existingError = document.querySelector(".error-text");
+  if (existingError) {
+    existingError.remove();
+  }
 
-    // remaining functions
+  // remaining functions
+  const currentDateTime = getCurrentDateTime();
+  const personLb = document.createElement("div");
+  personLb.innerHTML = ` <div class="personal_details">
+      <h4 class="name">${inputFNValue} ${inputLNValue}</h4>
+      <p class="date">${currentDateTime}</p>
+      </div>
+      <div class="countyr">${countryInputValue}</div>
+      <div class="score"> ${inputScoreValue}</div>
+      <div class="fxn">
+      <div class="delete">❌</div>
+      <div class="increase">+5</div>
+      <div class="decrease">-5</div>
+      </div>`;
+  personLb.classList.add("personLB");
+  leaderboard.appendChild(personLb);
+  let inputDel = personLb.querySelector(".delete");
+  let addInput = personLb.querySelector(".increase");
+  let subInput = personLb.querySelector(".decrease");
+  let newinputScore = personLb.querySelector(".score");
+
+  inputDel.addEventListener("click", () => {
+    personLb.style.display = "none";
+  });
+  addInput.addEventListener("click", () => {
+    let scoreVal = Number(newinputScore.textContent);
+    scoreVal += 5;
+    newinputScore.textContent = scoreVal;
+  });
+
+  subInput.addEventListener("click", () => {
+    let scoreVal = Number(newinputScore.textContent);
+    scoreVal -= 5;
+    newinputScore.textContent = scoreVal;
+  });
+
+  setLocalStorage();
+  // Clear input fields after submission
+  inputFN.value = "";
+  inputLN.value = "";
+  countryInput.value = "";
+  inputScore.value = "";
+});
+// btn event lstener
+
+//
+// get data from local storage
+function getLocalStorage() {
+  const existingData = JSON.parse(localStorage.getItem("personData"));
+  if (!existingData) {
+    return;
+  }
+  existingData.forEach((item) => {
     const currentDateTime = getCurrentDateTime();
     const personLb = document.createElement("div");
     personLb.innerHTML = ` <div class="personal_details">
-    <h4 class="name">${inputFN.value} ${inputLN.value}</h4>
-    <p class="date">${currentDateTime}</p>
-    </div>
-    <div class="countyr">${countryInput.value}</div>
-    <div class="score"> ${inputScore.value}</div>
-    <div class="fxn">
-    <div class="delete">❌</div>
-    <div class="increase">+5</div>
-    <div class="decrease">-5</div>
-    </div>`;
+      <h4 class="name">${item.firstName} ${item.lastName}</h4>
+      <p class="date">${currentDateTime}</p>
+      </div>
+      <div class="countyr">${item.country}</div>
+      <div class="score"> ${item.score}</div>
+      <div class="fxn">
+      <div class="delete">❌</div>
+      <div class="increase">+5</div>
+      <div class="decrease">-5</div>
+      </div>`;
     personLb.classList.add("personLB");
     leaderboard.appendChild(personLb);
     let inputDel = personLb.querySelector(".delete");
@@ -98,6 +161,18 @@ btn.addEventListener("click", () => {
 
     inputDel.addEventListener("click", () => {
       personLb.style.display = "none";
+      // Remove the corresponding data from local storage
+      const index = existingData.findIndex(
+        (data) =>
+          data.firstName === item.firstName &&
+          data.lastName === item.lastName &&
+          data.country === item.country &&
+          data.score === item.score
+      );
+      if (index !== -1) {
+        existingData.splice(index, 1);
+        localStorage.setItem("personData", JSON.stringify(existingData));
+      }
     });
     addInput.addEventListener("click", () => {
       let scoreVal = Number(newinputScore.textContent);
@@ -110,14 +185,8 @@ btn.addEventListener("click", () => {
       scoreVal -= 5;
       newinputScore.textContent = scoreVal;
     });
-
-    saveEntry(personLb);
-  }
-
-  // Clear input fields after submission
-  inputFN.value = "";
-  inputLN.value = "";
-  countryInput.value = "";
-  inputScore.value = "";
-});
+    console.log(item);
+  });
+}
+getLocalStorage();
 inputContainer.insertAdjacentElement("afterend", leaderboard);
