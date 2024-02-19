@@ -79,17 +79,16 @@ btn.addEventListener("click", () => {
     !inputScoreValue
   ) {
     errorMessage();
-  }
-  // Remove error message if it exists
-  const existingError = document.querySelector(".error-text");
-  if (existingError) {
-    existingError.remove();
-  }
+  } else {
+    const existingError = document.querySelector(".error-text");
+    if (existingError) {
+      existingError.remove();
+    }
 
-  // remaining functions
-  const currentDateTime = getCurrentDateTime();
-  const personLb = document.createElement("div");
-  personLb.innerHTML = ` <div class="personal_details">
+    // remaining functions
+    const currentDateTime = getCurrentDateTime();
+    const personLb = document.createElement("div");
+    personLb.innerHTML = ` <div class="personal_details">
       <h4 class="name">${inputFNValue} ${inputLNValue}</h4>
       <p class="date">${currentDateTime}</p>
       </div>
@@ -100,34 +99,35 @@ btn.addEventListener("click", () => {
       <div class="increase">+5</div>
       <div class="decrease">-5</div>
       </div>`;
-  personLb.classList.add("personLB");
-  leaderboard.appendChild(personLb);
-  let inputDel = personLb.querySelector(".delete");
-  let addInput = personLb.querySelector(".increase");
-  let subInput = personLb.querySelector(".decrease");
-  let newinputScore = personLb.querySelector(".score");
+    personLb.classList.add("personLB");
+    leaderboard.appendChild(personLb);
+    let inputDel = personLb.querySelector(".delete");
+    let addInput = personLb.querySelector(".increase");
+    let subInput = personLb.querySelector(".decrease");
+    let newinputScore = personLb.querySelector(".score");
 
-  inputDel.addEventListener("click", () => {
-    personLb.style.display = "none";
-  });
-  addInput.addEventListener("click", () => {
-    let scoreVal = Number(newinputScore.textContent);
-    scoreVal += 5;
-    newinputScore.textContent = scoreVal;
-  });
+    inputDel.addEventListener("click", () => {
+      personLb.style.display = "none";
+    });
+    addInput.addEventListener("click", () => {
+      let scoreVal = Number(newinputScore.textContent);
+      scoreVal += 5;
+      newinputScore.textContent = scoreVal;
+    });
 
-  subInput.addEventListener("click", () => {
-    let scoreVal = Number(newinputScore.textContent);
-    scoreVal -= 5;
-    newinputScore.textContent = scoreVal;
-  });
+    subInput.addEventListener("click", () => {
+      let scoreVal = Number(newinputScore.textContent);
+      scoreVal -= 5;
+      newinputScore.textContent = scoreVal;
+    });
 
-  setLocalStorage();
-  // Clear input fields after submission
-  inputFN.value = "";
-  inputLN.value = "";
-  countryInput.value = "";
-  inputScore.value = "";
+    setLocalStorage();
+    // Clear input fields after submission
+    inputFN.value = "";
+    inputLN.value = "";
+    countryInput.value = "";
+    inputScore.value = "";
+  }
 });
 // btn event lstener
 
@@ -185,7 +185,6 @@ function getLocalStorage() {
       scoreVal -= 5;
       newinputScore.textContent = scoreVal;
     });
-    console.log(item);
   });
 }
 getLocalStorage();
