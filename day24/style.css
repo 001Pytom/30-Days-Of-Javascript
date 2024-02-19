@@ -40,9 +40,6 @@ button {
   font-size: 16px;
 }
 
-
-
-
 .lastContainer {
   background-color: hsla(0, 0%, 100%, 0.1);
   width: 100%;
@@ -63,7 +60,7 @@ button {
 .weight-container {
   background-color: hsla(0, 0%, 100%, 0.11);
   padding: 3vh 4vw;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   gap: 20px;
